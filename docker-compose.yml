@@ -8,8 +8,11 @@ services:
       POSTGRES_USER: root
       POSTGRES_PASSWORD: root
       POSTGRES_DB: mmorpg
+    ports:
+      - "5432:5432"
   frontend:
     tty: true
+    restart: always
     build:
       context: ./docker/frontend
       dockerfile: Dockerfile
@@ -17,4 +20,4 @@ services:
       - "8080:8080"
     volumes:
       - ./frontend:/frontend
-      - /frontend/node_modules
+      - /node_modules
