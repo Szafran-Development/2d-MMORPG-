@@ -1,10 +1,3 @@
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const io = require('socket.io')
+import GameServer from './core/GameServer'
 
-const gameSocket = io(3001, {
-    path: '/',
-})
-
-gameSocket.on('connection', (socket) => {
-    console.log('Podłączono ' + socket)
-})
+export default new GameServer()
