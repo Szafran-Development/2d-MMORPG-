@@ -21,3 +21,29 @@ services:
     volumes:
       - ./frontend:/frontend
       - /node_modules
+  www:
+    tty: true
+    restart: always
+    build:
+      context: ./docker/backend/www
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./backend:/backend
+      - /node_modules
+    depends_on:
+      - db
+  game:
+    tty: true
+    restart: always
+    build:
+      context: ./docker/backend/game
+      dockerfile: Dockerfile
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./backend:/backend
+      - /node_modules
+    depends_on:
+      - db
