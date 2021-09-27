@@ -19,6 +19,6 @@
    "scripts": {
       "start-database": "ts-node database/index.ts",
       "start-www": "ts-node www/index.ts",
-      "start-gameserver": "ts-node game/index.ts"
+      "start-gameserver": "ts-node game/index.ts --resolveJsonModule"
    }
 }

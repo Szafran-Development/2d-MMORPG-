@@ -1,21 +1,22 @@
 import { getCurrentInstance } from 'vue'
 import { io, Socket } from 'socket.io-client'
-import SocketHandler from '@/client/core/SocketHandler'
+import SocketHandler from './SocketHandler'
+import Map from './Map'
 
 export default class GameClient {
     static vueInstance = getCurrentInstance()?.appContext.app
     static instance: GameClient
 
     socketHandler: SocketHandler | undefined
-
     // player
     // playerGroup
     // playersList
-    // mapManager
-    // renderManager
-    // fightManager
-    // tradeManager
-    // sceneManager
+    playersManager
+    mapManager = new Map()
+    renderManager
+    fightManager
+    tradeManager
+    sceneManager
 
     constructor() {
         this.init()

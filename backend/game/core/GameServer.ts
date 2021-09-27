@@ -1,6 +1,8 @@
 import { Connection, createConnection } from 'typeorm'
 import SocketHandler from './SocketHandler'
+import { Socket } from 'socket.io'
 // import { SocketEventTypes } from '../../../enums/SocketEventTypes'
+import Map from './Map'
 
 export default class GameServer {
     connectedSockets = []
@@ -9,6 +11,7 @@ export default class GameServer {
     actualTrades = []
     socketHandler: SocketHandler
     db: Connection
+    // mapManager = new Map()
 
     constructor() {
         this.init()
@@ -30,8 +33,12 @@ export default class GameServer {
 
     emitGameData(): void {
         setInterval(() => {
-            this.connectedSockets.forEach((socket) =>
-                socket.emit('SocketEventTypes.GameData', '')
+            // const dataToEmit = {
+            //     mapData: this.mapManager.dataForClient,
+            // }
+
+            this.connectedSockets.forEach((socket: Socket) =>
+                socket.emit('gameData', 'dataToEmit')
             )
         }, 1000 / 25)
     }

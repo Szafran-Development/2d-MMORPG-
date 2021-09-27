@@ -1,4 +1,5 @@
 import { Server, Socket } from 'socket.io'
+import gameServer from '../index'
 
 const socketEvents = {
     characterLogin(socket: Socket, ...additionalParameters) {
@@ -29,6 +30,7 @@ export default class SocketHandler {
     connectionHandler(): void {
         this.instance.on('connection', (socket) => {
             console.log('player connected')
+            gameServer.connectedSockets.push(socket)
             this.bindHandlersToClientSocket(socket)
         })
     }
@@ -37,7 +39,7 @@ export default class SocketHandler {
         Object.entries(this.socketEventHandlers).forEach(
             ([eventName, handler]) => {
                 clientSocket.on(eventName, (additionalParameters) => {
-                    handler[eventName](...additionalParameters)
+                    handler(clientSocket, additionalParameters)
                 })
             }
         )
