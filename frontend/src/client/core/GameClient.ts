@@ -2,15 +2,16 @@ import { getCurrentInstance } from 'vue'
 import { io, Socket } from 'socket.io-client'
 import SocketHandler from './SocketHandler'
 import Map from './Map'
+import { Observable } from '@/client/core/EventBus'
+import EventBus from '@/client/core/EventBus'
 
-export default class GameClient {
+export default class GameClient implements Observable {
     static vueInstance = getCurrentInstance()?.appContext.app
     static instance: GameClient
 
+    eventBus = EventBus
+
     socketHandler: SocketHandler | undefined
-    // player
-    // playerGroup
-    // playersList
     playersManager
     mapManager = new Map()
     renderManager
@@ -24,6 +25,8 @@ export default class GameClient {
 
     init(): void {
         this.initializeSocketHandler()
+
+        this.subscribeEvents()
     }
 
     static getInstance(): GameClient {
@@ -35,5 +38,13 @@ export default class GameClient {
 
     initializeSocketHandler(): void {
         this.socketHandler = new SocketHandler()
+    }
+
+    subscribeEvents() {
+        this.eventBus.subscribe('socketInitialized', this)
+    }
+
+    on(eventName: string, data: any) {
+        this[eventName]({ ...data })
     }
 }

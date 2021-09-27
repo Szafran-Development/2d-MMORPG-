@@ -1,4 +1,6 @@
 import { io, Socket } from 'socket.io-client'
+import { Observable } from '@/client/core/EventBus'
+import EventBus from '@/client/core/EventBus'
 
 const socketEvents = {
     receivedGameData(socket, ...data) {
@@ -6,8 +8,10 @@ const socketEvents = {
     },
 }
 
-export default class SocketHandler {
+export default class SocketHandler implements Observable {
     instance: Socket | undefined
+
+    eventBus = EventBus
 
     socketEventHandlers = {
         gameData: socketEvents.receivedGameData,
@@ -30,5 +34,9 @@ export default class SocketHandler {
                 })
             }
         )
+    }
+
+    on(eventName: string, data: any) {
+        this[eventName]({ ...data })
     }
 }
