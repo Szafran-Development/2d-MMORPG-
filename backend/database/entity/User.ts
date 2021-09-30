@@ -1,18 +1,25 @@
-import {Entity, PrimaryGeneratedColumn, Column} from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from 'typeorm'
+import { IsEmail, Length } from 'class-validator'
+import bcrypt from 'bcryptjs'
 
 @Entity()
-export class User {
-
+export class User extends BaseEntity {
     @PrimaryGeneratedColumn()
-    id: number;
+    id: number
 
     @Column()
-    firstName: string;
+    @IsEmail()
+    email: string
 
     @Column()
-    lastName: string;
+    @Length(8)
+    password: string
 
-    @Column()
-    age: number;
+    static async hashPassword(password: string) {
+        return await bcrypt.hash(password, 8)
+    }
 
+    static async checkIfPasswordIsValid(passwordToCheck: string, hash: string) {
+        return await bcrypt.compare(passwordToCheck, hash)
+    }
 }

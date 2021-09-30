@@ -3,8 +3,10 @@ import { Observable } from '@/client/core/EventBus'
 import EventBus from '@/client/core/EventBus'
 
 const socketEvents = {
-    receivedGameData(socket, ...data) {
-        console.log(data)
+    receivedGameData(socket, data) {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        this.eventBus.emit('setMapData', data)
     },
 }
 
@@ -14,7 +16,7 @@ export default class SocketHandler implements Observable {
     eventBus = EventBus
 
     socketEventHandlers = {
-        gameData: socketEvents.receivedGameData,
+        gameData: socketEvents.receivedGameData.bind(this),
     }
 
     constructor() {

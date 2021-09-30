@@ -1,17 +1,14 @@
 import { Connection, createConnection } from 'typeorm'
-import SocketHandler from './SocketHandler'
+import SocketService from './SocketService'
 import { Socket } from 'socket.io'
-// import { SocketEventTypes } from '../../../enums/SocketEventTypes'
-import Map from './Map'
+import MapService from './MapService'
+import PlayersService from './PlayersService'
+import ServiceLocator from './ServiceLocator'
 
 export default class GameServer {
-    connectedSockets = []
-    connectedPlayers = []
-    actualCombats = []
-    actualTrades = []
-    socketHandler: SocketHandler
     db: Connection
-    // mapManager = new Map()
+
+    serviceLocator = new ServiceLocator()
 
     constructor() {
         this.init()
@@ -19,27 +16,16 @@ export default class GameServer {
 
     async init(): Promise<void> {
         await this.createDatabaseConnection()
-        this.initializeSocketHandler()
-        this.emitGameData()
+        this.createServices()
     }
 
-    initializeSocketHandler(): void {
-        this.socketHandler = new SocketHandler()
+    createServices(): void {
+        this.serviceLocator.setService('socketService', new SocketService(this))
+        this.serviceLocator.setService('mapService', new MapService())
+        this.serviceLocator.setService('playersService', new PlayersService())
     }
 
     async createDatabaseConnection(): Promise<void> {
         this.db = await createConnection()
-    }
-
-    emitGameData(): void {
-        setInterval(() => {
-            // const dataToEmit = {
-            //     mapData: this.mapManager.dataForClient,
-            // }
-
-            this.connectedSockets.forEach((socket: Socket) =>
-                socket.emit('gameData', 'dataToEmit')
-            )
-        }, 1000 / 25)
     }
 }

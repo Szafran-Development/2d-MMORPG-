@@ -1,13 +1,13 @@
 export default class Entity {
-    id: string
-    name: string
-    coords: {
+    id?: string
+    name?: string
+    coords?: {
         x: number
         y: number
     }
-    width: number
-    height: number
-    imageSrc: string
+    width?: number
+    height?: number
+    imageSrc?: string
 
     constructor(data) {
         this.setObjectData(data)

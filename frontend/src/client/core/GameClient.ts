@@ -4,6 +4,7 @@ import SocketHandler from './SocketHandler'
 import Map from './Map'
 import { Observable } from '@/client/core/EventBus'
 import EventBus from '@/client/core/EventBus'
+import Render from '@/client/core/Render'
 
 export default class GameClient implements Observable {
     static vueInstance = getCurrentInstance()?.appContext.app
@@ -13,7 +14,7 @@ export default class GameClient implements Observable {
 
     socketHandler: SocketHandler | undefined
     playersManager
-    mapManager = new Map()
+    mapManager
     renderManager
     fightManager
     tradeManager
@@ -21,6 +22,8 @@ export default class GameClient implements Observable {
 
     constructor() {
         this.init()
+
+        this.renderManager = new Render()
     }
 
     init(): void {

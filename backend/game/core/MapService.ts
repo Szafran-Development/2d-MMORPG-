@@ -1,6 +1,6 @@
 import * as map from '../assets/map.json'
 
-export default class Map {
+export default class MapService {
     mapLayers: number[][] = []
     collidersCoordinates = []
     collidingTilesIds = []
